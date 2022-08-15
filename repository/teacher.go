@@ -9,11 +9,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type teacherRepository struct {
+type teacher struct {
 	collection *mongo.Collection
 }
 
-func (tr *teacherRepository) CreateTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error {
+func (t *teacher) CreateTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error {
 	if _, err := collection.InsertOne(ctx, teacher); err != nil {
 		return err
 	}
@@ -21,7 +21,7 @@ func (tr *teacherRepository) CreateTeacher(ctx context.Context, collection *mong
 	return nil
 }
 
-func (tr *teacherRepository) UpdateTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error {
+func (t *teacher) UpdateTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error {
 	bsonTeacher, err := bson.Marshal(teacher)
 	if err != nil {
 		return err
@@ -36,7 +36,7 @@ func (tr *teacherRepository) UpdateTeacher(ctx context.Context, collection *mong
 	return nil
 }
 
-func (tr *teacherRepository) DeleteTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error {
+func (t *teacher) DeleteTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error {
 	filter := bson.M{"_id": teacher.TeacherId}
 	if _, err := collection.DeleteOne(ctx, filter); err != nil {
 		return err
@@ -45,7 +45,7 @@ func (tr *teacherRepository) DeleteTeacher(ctx context.Context, collection *mong
 	return nil
 }
 
-func (tr *teacherRepository) GetTeacherById(ctx context.Context, collection *mongo.Collection, id primitive.ObjectID) (*entity.Teacher, error) {
+func (t *teacher) GetTeacherById(ctx context.Context, collection *mongo.Collection, id primitive.ObjectID) (*entity.Teacher, error) {
 	var teacher entity.Teacher
 
 	if err := collection.FindOne(ctx, id).Decode(&teacher); err != nil {
@@ -55,7 +55,7 @@ func (tr *teacherRepository) GetTeacherById(ctx context.Context, collection *mon
 	return &teacher, nil
 }
 
-func (tr *teacherRepository) GetTeacherByName(ctx context.Context, collection *mongo.Collection, name string) ([]*entity.Teacher, error) {
+func (t *teacher) GetTeacherByName(ctx context.Context, collection *mongo.Collection, name string) ([]*entity.Teacher, error) {
 	filter := bson.M{"name": name}
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
@@ -72,7 +72,7 @@ func (tr *teacherRepository) GetTeacherByName(ctx context.Context, collection *m
 	return teachers, nil
 }
 
-func (tr *teacherRepository) GetTeacherBySubject(ctx context.Context, collection *mongo.Collection, subject string) ([]*entity.Teacher, error) {
+func (t *teacher) GetTeacherBySubject(ctx context.Context, collection *mongo.Collection, subject string) ([]*entity.Teacher, error) {
 	filter := bson.M{"subject": subject}
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
@@ -89,7 +89,7 @@ func (tr *teacherRepository) GetTeacherBySubject(ctx context.Context, collection
 	return teachers, nil
 }
 
-func (tr *teacherRepository) GetTeacherByClass(ctx context.Context, collection *mongo.Collection, classId primitive.ObjectID) ([]*entity.Teacher, error) {
+func (t *teacher) GetTeacherByClass(ctx context.Context, collection *mongo.Collection, classId primitive.ObjectID) ([]*entity.Teacher, error) {
 	filter := bson.M{"class": classId}
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
@@ -106,7 +106,7 @@ func (tr *teacherRepository) GetTeacherByClass(ctx context.Context, collection *
 	return teachers, nil
 }
 
-func (tr *teacherRepository) GetAllTeacher(ctx context.Context, collection *mongo.Collection) ([]*entity.Teacher, error) {
+func (t *teacher) GetAllTeacher(ctx context.Context, collection *mongo.Collection) ([]*entity.Teacher, error) {
 	cursor, err := collection.Find(ctx, bson.D{{}})
 	if err != nil {
 		return nil, err
@@ -122,7 +122,7 @@ func (tr *teacherRepository) GetAllTeacher(ctx context.Context, collection *mong
 	return teachers, nil
 }
 
-func (tr *teacherRepository) DeleteAllTeacher(ctx context.Context, collection *mongo.Collection) error {
+func (t *teacher) DeleteAllTeacher(ctx context.Context, collection *mongo.Collection) error {
 	_, err := collection.DeleteMany(ctx, bson.D{{}})
 	if err != nil {
 		return err

@@ -9,11 +9,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type studentRepository struct {
+type student struct {
 	collection *mongo.Collection
 }
 
-func (sr *studentRepository) CreateStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error {
+func (s *student) CreateStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error {
 	if _, err := collection.InsertOne(ctx, student); err != nil {
 		return err
 	}
@@ -21,7 +21,7 @@ func (sr *studentRepository) CreateStudent(ctx context.Context, collection *mong
 	return nil
 }
 
-func (sr *studentRepository) UpdateStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error {
+func (s *student) UpdateStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error {
 	bsonStudent, err := bson.Marshal(student)
 	if err != nil {
 		return err
@@ -36,7 +36,7 @@ func (sr *studentRepository) UpdateStudent(ctx context.Context, collection *mong
 	return nil
 }
 
-func (sr *studentRepository) DeleteStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error {
+func (s *student) DeleteStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error {
 	filter := bson.M{"_id": student.StudentId}
 	if _, err := collection.DeleteOne(ctx, filter); err != nil {
 		return err
@@ -45,7 +45,7 @@ func (sr *studentRepository) DeleteStudent(ctx context.Context, collection *mong
 	return nil
 }
 
-func (sr *studentRepository) GetStudentById(ctx context.Context, collection *mongo.Collection, id primitive.ObjectID) (*entity.Student, error) {
+func (s *student) GetStudentById(ctx context.Context, collection *mongo.Collection, id primitive.ObjectID) (*entity.Student, error) {
 	var student entity.Student
 
 	if err := collection.FindOne(ctx, id).Decode(&student); err != nil {
@@ -55,7 +55,7 @@ func (sr *studentRepository) GetStudentById(ctx context.Context, collection *mon
 	return &student, nil
 }
 
-func (sr *studentRepository) GetStudentByName(ctx context.Context, collection *mongo.Collection, name string) ([]*entity.Student, error) {
+func (s *student) GetStudentByName(ctx context.Context, collection *mongo.Collection, name string) ([]*entity.Student, error) {
 	filter := bson.M{"name": name}
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
@@ -72,7 +72,7 @@ func (sr *studentRepository) GetStudentByName(ctx context.Context, collection *m
 	return students, nil
 }
 
-func (sr *studentRepository) GetStudentsByClassOf(ctx context.Context, collection *mongo.Collection, classOf int) ([]*entity.Student, error) {
+func (s *student) GetStudentsByClassOf(ctx context.Context, collection *mongo.Collection, classOf int) ([]*entity.Student, error) {
 	filter := bson.M{"class_of": classOf}
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
@@ -89,7 +89,7 @@ func (sr *studentRepository) GetStudentsByClassOf(ctx context.Context, collectio
 	return students, nil
 }
 
-func (sr *studentRepository) GetStudentsByClass(ctx context.Context, collection *mongo.Collection, classId primitive.ObjectID) ([]*entity.Student, error) {
+func (s *student) GetStudentsByClass(ctx context.Context, collection *mongo.Collection, classId primitive.ObjectID) ([]*entity.Student, error) {
 	filter := bson.M{"class": classId}
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
@@ -106,7 +106,7 @@ func (sr *studentRepository) GetStudentsByClass(ctx context.Context, collection 
 	return students, nil
 }
 
-func (sr *studentRepository) GetAllStudent(ctx context.Context, collection *mongo.Collection) ([]*entity.Student, error) {
+func (s *student) GetAllStudent(ctx context.Context, collection *mongo.Collection) ([]*entity.Student, error) {
 	cursor, err := collection.Find(ctx, bson.D{{}})
 	if err != nil {
 		return nil, err
@@ -122,7 +122,7 @@ func (sr *studentRepository) GetAllStudent(ctx context.Context, collection *mong
 	return students, nil
 }
 
-func (sr *studentRepository) DeleteAllStudent(ctx context.Context, collection *mongo.Collection) error {
+func (s *student) DeleteAllStudent(ctx context.Context, collection *mongo.Collection) error {
 	_, err := collection.DeleteMany(ctx, bson.D{{}})
 	if err != nil {
 		return err

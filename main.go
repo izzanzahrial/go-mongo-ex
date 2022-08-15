@@ -6,7 +6,7 @@ import (
 
 	"github.com/izzanzahrial/go-mongo-ex/db"
 	"github.com/joho/godotenv"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 var local bool

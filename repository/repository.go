@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type StudentRepository interface {
+type Student interface {
 	CreateStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error
 	UpdateStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error
 	DeleteStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error
@@ -20,7 +20,7 @@ type StudentRepository interface {
 	DeleteAllStudent(ctx context.Context, collection *mongo.Collection) error
 }
 
-type TeacherRepository interface {
+type Teacher interface {
 	CreateTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error
 	UpdateTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error
 	DeleteTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error
@@ -32,7 +32,7 @@ type TeacherRepository interface {
 	DeleteAllTeacher(ctx context.Context, collection *mongo.Collection) error
 }
 
-type ClassRepository interface {
+type Class interface {
 	CreateClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error
 	UpdateClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error
 	DeleteClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error

@@ -9,11 +9,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type classRepository struct {
+type class struct {
 	collection *mongo.Collection
 }
 
-func (cr *classRepository) CreateClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error {
+func (c *class) createClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error {
 	if _, err := collection.InsertOne(ctx, class); err != nil {
 		return err
 	}
@@ -21,7 +21,7 @@ func (cr *classRepository) CreateClass(ctx context.Context, collection *mongo.Co
 	return nil
 }
 
-func (cr *classRepository) UpdateClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error {
+func (c *class) UpdateClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error {
 	bsonClass, err := bson.Marshal(class)
 	if err != nil {
 		return err
@@ -36,7 +36,7 @@ func (cr *classRepository) UpdateClass(ctx context.Context, collection *mongo.Co
 	return nil
 }
 
-func (cr *classRepository) DeleteClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error {
+func (c *class) DeleteClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error {
 	filter := bson.M{"_id": class.Id}
 	if _, err := collection.DeleteOne(ctx, filter); err != nil {
 		return err
@@ -45,7 +45,7 @@ func (cr *classRepository) DeleteClass(ctx context.Context, collection *mongo.Co
 	return nil
 }
 
-func (cr *classRepository) GetClassById(ctx context.Context, collection *mongo.Collection, id primitive.ObjectID) (*entity.Class, error) {
+func (c *class) GetClassById(ctx context.Context, collection *mongo.Collection, id primitive.ObjectID) (*entity.Class, error) {
 	var class entity.Class
 
 	if err := collection.FindOne(ctx, id).Decode(&class); err != nil {
@@ -55,7 +55,7 @@ func (cr *classRepository) GetClassById(ctx context.Context, collection *mongo.C
 	return &class, nil
 }
 
-func (cr *classRepository) GetClassByName(ctx context.Context, collection *mongo.Collection, name string) ([]*entity.Class, error) {
+func (c *class) GetClassByName(ctx context.Context, collection *mongo.Collection, name string) ([]*entity.Class, error) {
 	filter := bson.M{"name": name}
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
@@ -72,7 +72,7 @@ func (cr *classRepository) GetClassByName(ctx context.Context, collection *mongo
 	return classes, nil
 }
 
-func (cr *classRepository) GetClassPeriod(ctx context.Context, collection *mongo.Collection, period int) ([]*entity.Class, error) {
+func (c *class) GetClassPeriod(ctx context.Context, collection *mongo.Collection, period int) ([]*entity.Class, error) {
 	filter := bson.M{"period": period}
 	cursor, err := collection.Find(ctx, filter)
 	if err != nil {
@@ -89,7 +89,7 @@ func (cr *classRepository) GetClassPeriod(ctx context.Context, collection *mongo
 	return classes, nil
 }
 
-func (cr *classRepository) GetAllClass(ctx context.Context, collection *mongo.Collection) ([]*entity.Class, error) {
+func (c *class) GetAllClass(ctx context.Context, collection *mongo.Collection) ([]*entity.Class, error) {
 	cursor, err := collection.Find(ctx, bson.D{{}})
 	if err != nil {
 		return nil, err
@@ -105,7 +105,7 @@ func (cr *classRepository) GetAllClass(ctx context.Context, collection *mongo.Co
 	return classes, nil
 }
 
-func (cr *classRepository) DeleteAllClass(ctx context.Context, collection *mongo.Collection) error {
+func (c *class) DeleteAllClass(ctx context.Context, collection *mongo.Collection) error {
 	_, err := collection.DeleteMany(ctx, bson.D{{}})
 	if err != nil {
 		return err
