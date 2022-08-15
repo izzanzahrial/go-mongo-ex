@@ -36,8 +36,8 @@ func (s *student) UpdateStudent(ctx context.Context, collection *mongo.Collectio
 	return nil
 }
 
-func (s *student) DeleteStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error {
-	filter := bson.M{"_id": student.StudentId}
+func (s *student) DeleteStudent(ctx context.Context, collection *mongo.Collection, id primitive.ObjectID) error {
+	filter := bson.M{"_id": id}
 	if _, err := collection.DeleteOne(ctx, filter); err != nil {
 		return err
 	}

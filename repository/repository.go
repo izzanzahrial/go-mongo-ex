@@ -11,7 +11,7 @@ import (
 type Student interface {
 	CreateStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error
 	UpdateStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error
-	DeleteStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error
+	DeleteStudent(ctx context.Context, collection *mongo.Collection, id primitive.ObjectID) error
 	GetStudentById(ctx context.Context, collection *mongo.Collection, id primitive.ObjectID) (*entity.Student, error)
 	GetStudentByName(ctx context.Context, collection *mongo.Collection, name string) ([]*entity.Student, error)
 	GetStudentsByClass(ctx context.Context, collection *mongo.Collection, classId primitive.ObjectID) ([]*entity.Student, error)

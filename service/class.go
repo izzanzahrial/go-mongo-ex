@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/izzanzahrial/go-mongo-ex/db"
 	"github.com/izzanzahrial/go-mongo-ex/entity"
@@ -45,10 +46,15 @@ func (c *class) DeleteClass(ctx context.Context, class *entity.Class) error {
 	return nil
 }
 
-func (c *class) GetClassById(ctx context.Context, id primitive.ObjectID) (*entity.Class, error) {
+func (c *class) GetClassById(ctx context.Context, id string) (*entity.Class, error) {
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
 	collection := c.DB().Collection(c.collectionName)
 
-	class, err := c.repository.GetClassById(ctx, collection, id)
+	class, err := c.repository.GetClassById(ctx, collection, objectID)
 	if err != nil {
 		return nil, err
 	}
@@ -67,10 +73,15 @@ func (c *class) GetClassByName(ctx context.Context, name string) ([]*entity.Clas
 	return classes, nil
 }
 
-func (c *class) GetClassPeriod(ctx context.Context, period int) ([]*entity.Class, error) {
+func (c *class) GetClassPeriod(ctx context.Context, period string) ([]*entity.Class, error) {
+	intPeriod, err := strconv.Atoi(period)
+	if err != nil {
+		return nil, err
+	}
+
 	collection := c.DB().Collection(c.collectionName)
 
-	classes, err := c.repository.GetClassPeriod(ctx, collection, period)
+	classes, err := c.repository.GetClassPeriod(ctx, collection, intPeriod)
 	if err != nil {
 		return nil, err
 	}

@@ -45,10 +45,15 @@ func (t *teacher) DeleteTeacher(ctx context.Context, teacher *entity.Teacher) er
 	return nil
 }
 
-func (t *teacher) GetTeacherById(ctx context.Context, id primitive.ObjectID) (*entity.Teacher, error) {
+func (t *teacher) GetTeacherById(ctx context.Context, id string) (*entity.Teacher, error) {
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
+
 	collection := t.DB().Collection(t.collectionName)
 
-	teacher, err := t.repository.GetTeacherById(ctx, collection, id)
+	teacher, err := t.repository.GetTeacherById(ctx, collection, objectID)
 	if err != nil {
 		return nil, err
 	}
@@ -78,10 +83,15 @@ func (t *teacher) GetTeacherBySubject(ctx context.Context, subject string) ([]*e
 	return teachers, nil
 }
 
-func (t *teacher) GetTeacherByClass(ctx context.Context, classId primitive.ObjectID) ([]*entity.Teacher, error) {
+func (t *teacher) GetTeacherByClass(ctx context.Context, classId string) ([]*entity.Teacher, error) {
+	id, err := primitive.ObjectIDFromHex(classId)
+	if err != nil {
+		return nil, err
+	}
+
 	collection := t.DB().Collection(t.collectionName)
 
-	teachers, err := t.repository.GetTeacherByClass(ctx, collection, classId)
+	teachers, err := t.repository.GetTeacherByClass(ctx, collection, id)
 	if err != nil {
 		return nil, err
 	}

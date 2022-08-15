@@ -35,20 +35,28 @@ func (s *student) UpdateStudent(ctx context.Context, student *entity.Student) er
 	return nil
 }
 
-func (s *student) DeleteStudent(ctx context.Context, student *entity.Student) error {
+func (s *student) DeleteStudent(ctx context.Context, id string) error {
 	collection := s.DB().Collection(s.collectionName)
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return err
+	}
 
-	if err := s.repository.DeleteStudent(ctx, collection, student); err != nil {
+	if err := s.repository.DeleteStudent(ctx, collection, objectID); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (s *student) GetStudentById(ctx context.Context, id primitive.ObjectID) (*entity.Student, error) {
+func (s *student) GetStudentById(ctx context.Context, id string) (*entity.Student, error) {
 	collection := s.DB().Collection(s.collectionName)
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return nil, err
+	}
 
-	student, err := s.repository.GetStudentById(ctx, collection, id)
+	student, err := s.repository.GetStudentById(ctx, collection, objectID)
 	if err != nil {
 		return nil, err
 	}
@@ -67,10 +75,14 @@ func (s *student) GetStudentByName(ctx context.Context, name string) ([]*entity.
 	return students, err
 }
 
-func (s *student) GetStudentsByClass(ctx context.Context, classId primitive.ObjectID) ([]*entity.Student, error) {
+func (s *student) GetStudentsByClass(ctx context.Context, classId string) ([]*entity.Student, error) {
 	collection := s.DB().Collection(s.collectionName)
+	objectID, err := primitive.ObjectIDFromHex(classId)
+	if err != nil {
+		return nil, err
+	}
 
-	students, err := s.repository.GetStudentsByClass(ctx, collection, classId)
+	students, err := s.repository.GetStudentsByClass(ctx, collection, objectID)
 	if err != nil {
 		return nil, err
 	}
