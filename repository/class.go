@@ -10,10 +10,9 @@ import (
 )
 
 type class struct {
-	collection *mongo.Collection
 }
 
-func (c *class) createClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error {
+func (c *class) CreateClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error {
 	if _, err := collection.InsertOne(ctx, class); err != nil {
 		return err
 	}

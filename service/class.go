@@ -36,8 +36,13 @@ func (c *class) UpdateClass(ctx context.Context, class *entity.Class) error {
 	return nil
 }
 
-func (c *class) DeleteClass(ctx context.Context, class *entity.Class) error {
+func (c *class) DeleteClass(ctx context.Context, id string) error {
 	collection := c.DB().Collection(c.collectionName)
+
+	class, err := c.GetClassById(ctx, id)
+	if err != nil {
+		return err
+	}
 
 	if err := c.repository.DeleteClass(ctx, collection, class); err != nil {
 		return err

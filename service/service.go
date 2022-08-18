@@ -3,7 +3,9 @@ package service
 import (
 	"context"
 
+	"github.com/izzanzahrial/go-mongo-ex/db"
 	"github.com/izzanzahrial/go-mongo-ex/entity"
+	"github.com/izzanzahrial/go-mongo-ex/repository"
 )
 
 type Student interface {
@@ -18,6 +20,14 @@ type Student interface {
 	DeleteAllStudent(ctx context.Context) error
 }
 
+func NewStudentService(coll string, repo repository.Student, con db.Connection) Student {
+	return &student{
+		collectionName: coll,
+		repository:     repo,
+		Connection:     con,
+	}
+}
+
 type Teacher interface {
 	CreateTeacher(ctx context.Context, teacher *entity.Teacher) error
 	UpdateTeacher(ctx context.Context, teacher *entity.Teacher) error
@@ -30,6 +40,14 @@ type Teacher interface {
 	DeleteAllTeacher(ctx context.Context) error
 }
 
+func NewTeacherService(coll string, repo repository.Teacher, con db.Connection) Teacher {
+	return &teacher{
+		collectionName: coll,
+		repository:     repo,
+		Connection:     con,
+	}
+}
+
 type Class interface {
 	CreateClass(ctx context.Context, class *entity.Class) error
 	UpdateClass(ctx context.Context, class *entity.Class) error
@@ -39,4 +57,12 @@ type Class interface {
 	GetClassPeriod(ctx context.Context, period string) ([]*entity.Class, error)
 	GetAllClass(ctx context.Context) ([]*entity.Class, error)
 	DeleteAllClass(ctx context.Context) error
+}
+
+func NewClassService(coll string, repo repository.Class, con db.Connection) Class {
+	return &class{
+		collectionName: coll,
+		repository:     repo,
+		Connection:     con,
+	}
 }

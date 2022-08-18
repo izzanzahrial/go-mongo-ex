@@ -35,8 +35,13 @@ func (t *teacher) UpdateTeacher(ctx context.Context, teacher *entity.Teacher) er
 	return nil
 }
 
-func (t *teacher) DeleteTeacher(ctx context.Context, teacher *entity.Teacher) error {
+func (t *teacher) DeleteTeacher(ctx context.Context, id string) error {
 	collection := t.DB().Collection(t.collectionName)
+
+	teacher, err := t.GetTeacherById(ctx, id)
+	if err != nil {
+		return err
+	}
 
 	if err := t.repository.DeleteTeacher(ctx, collection, teacher); err != nil {
 		return err

@@ -20,6 +20,10 @@ type Student interface {
 	DeleteAllStudent(ctx context.Context, collection *mongo.Collection) error
 }
 
+func NewStudentRepository() Student {
+	return &student{}
+}
+
 type Teacher interface {
 	CreateTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error
 	UpdateTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error
@@ -32,6 +36,10 @@ type Teacher interface {
 	DeleteAllTeacher(ctx context.Context, collection *mongo.Collection) error
 }
 
+func NewTeacherRepository() Teacher {
+	return &teacher{}
+}
+
 type Class interface {
 	CreateClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error
 	UpdateClass(ctx context.Context, collection *mongo.Collection, class *entity.Class) error
@@ -41,4 +49,8 @@ type Class interface {
 	GetClassPeriod(ctx context.Context, collection *mongo.Collection, period int) ([]*entity.Class, error)
 	GetAllClass(ctx context.Context, collection *mongo.Collection) ([]*entity.Class, error)
 	DeleteAllClass(ctx context.Context, collection *mongo.Collection) error
+}
+
+func NewClassRepository() Class {
+	return &class{}
 }

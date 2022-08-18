@@ -10,7 +10,6 @@ import (
 )
 
 type student struct {
-	collection *mongo.Collection
 }
 
 func (s *student) CreateStudent(ctx context.Context, collection *mongo.Collection, student *entity.Student) error {

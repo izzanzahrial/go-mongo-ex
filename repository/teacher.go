@@ -10,7 +10,6 @@ import (
 )
 
 type teacher struct {
-	collection *mongo.Collection
 }
 
 func (t *teacher) CreateTeacher(ctx context.Context, collection *mongo.Collection, teacher *entity.Teacher) error {
