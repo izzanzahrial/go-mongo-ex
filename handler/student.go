@@ -21,11 +21,11 @@ func (s *student) CreateStudent(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	var student *entity.Student
+	var student entity.Student
 	student.Name = c.FormValue("name")
 	student.ClassOf = classOf
 
-	if err := s.service.CreateStudent(context.Background(), student); err != nil {
+	if err := s.service.CreateStudent(context.Background(), &student); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
@@ -33,14 +33,14 @@ func (s *student) CreateStudent(c echo.Context) error {
 }
 
 func (s *student) UpdateStudent(c echo.Context) error {
-	var student *entity.Student
+	var student entity.Student
 
-	if err := json.NewDecoder(c.Request().Body).Decode(student); err != nil {
+	if err := json.NewDecoder(c.Request().Body).Decode(&student); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	defer c.Request().Body.Close()
 
-	if err := s.service.UpdateStudent(context.Background(), student); err != nil {
+	if err := s.service.UpdateStudent(context.Background(), &student); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 

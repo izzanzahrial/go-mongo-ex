@@ -21,11 +21,11 @@ func (cl *class) CreateClass(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	var class *entity.Class
+	var class entity.Class
 	class.Name = c.FormValue("name")
 	class.Period = period
 
-	if err := cl.service.CreateClass(context.Background(), class); err != nil {
+	if err := cl.service.CreateClass(context.Background(), &class); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
@@ -33,14 +33,14 @@ func (cl *class) CreateClass(c echo.Context) error {
 }
 
 func (cl *class) UpdateClass(c echo.Context) error {
-	var class *entity.Class
+	var class entity.Class
 
-	if err := json.NewDecoder(c.Request().Body).Decode(class); err != nil {
+	if err := json.NewDecoder(c.Request().Body).Decode(&class); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	defer c.Request().Body.Close()
 
-	if err := cl.service.UpdateClass(context.Background(), class); err != nil {
+	if err := cl.service.UpdateClass(context.Background(), &class); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 

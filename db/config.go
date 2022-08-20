@@ -34,7 +34,7 @@ func NewConfig() Config {
 		log.Fatalln("Error on load env var: ", err.Error())
 	}
 
-	cfg.dsn = fmt.Sprintf("mongodb://%s:%s@%s:%d/%s", cfg.dbUser, cfg.dbPass, cfg.dbHost, cfg.dbPort, cfg.dbName)
+	cfg.dsn = fmt.Sprintf("mongodb://%s:%s@%s:%d/?aauthSource=admin", cfg.dbUser, cfg.dbPass, cfg.dbHost, cfg.dbPort)
 	return &cfg
 }
 

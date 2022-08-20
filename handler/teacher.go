@@ -15,11 +15,11 @@ type teacher struct {
 }
 
 func (t *teacher) CreateTeacher(c echo.Context) error {
-	var teacher *entity.Teacher
+	var teacher entity.Teacher
 	teacher.Name = c.FormValue("name")
 	teacher.Subjects = []string{c.FormValue("subject")}
 
-	if err := t.service.CreateTeacher(context.Background(), teacher); err != nil {
+	if err := t.service.CreateTeacher(context.Background(), &teacher); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
@@ -27,14 +27,14 @@ func (t *teacher) CreateTeacher(c echo.Context) error {
 }
 
 func (t *teacher) UpdateTeacher(c echo.Context) error {
-	var teacher *entity.Teacher
+	var teacher entity.Teacher
 
-	if err := json.NewDecoder(c.Request().Body).Decode(teacher); err != nil {
+	if err := json.NewDecoder(c.Request().Body).Decode(&teacher); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	defer c.Request().Body.Close()
 
-	if err := t.service.UpdateTeacher(context.Background(), teacher); err != nil {
+	if err := t.service.UpdateTeacher(context.Background(), &teacher); err != nil {
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
